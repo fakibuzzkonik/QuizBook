@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBook">
-        <activity android:name=".View.ContestAdd"></activity>
+        <activity android:name=".ContestAdd"/>
         <activity android:name=".View.Contests" />
-        <activity android:name=".BookAdd" />
+        <activity android:name=".View.BookAdd" />
         <activity android:name=".LoginRegistration" />
         <activity android:name=".LoginProfile" />
         <activity

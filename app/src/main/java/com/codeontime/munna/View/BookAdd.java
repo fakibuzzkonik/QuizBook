@@ -1,4 +1,4 @@
-package com.codeontime.munna;
+package com.codeontime.munna.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +20,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.codeontime.munna.MainActivity;
+import com.codeontime.munna.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +33,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.yalantis.ucrop.UCrop;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class BookAdd extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener; //For going to Account Activity Page
 
-    //Photo Selecting and Croping
+    //Photo Selecting
     private final int CODE_IMG_GALLERY = 1;
     private final String SAMPLE_CROPPED_IMG_NAME = "SampleCropIng";
     Uri imageUri_storage;
@@ -264,6 +265,8 @@ public class BookAdd extends AppCompatActivity {
             }else{
                 Toast.makeText(this, "Failed! (File is Larger Than 5MB)",Toast.LENGTH_SHORT).show();
             }
+        }else{
+            Toast.makeText(this, "Canceled",Toast.LENGTH_SHORT).show();
         }
     }
     public String getSize(Uri uri) {

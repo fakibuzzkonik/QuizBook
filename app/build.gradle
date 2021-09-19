@@ -41,7 +41,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
 
     implementation 'androidx.cardview:cardview:1.0.0'           //card view
-    implementation 'com.github.yalantis:ucrop:2.2.5-native'     //crop image
     implementation 'com.squareup.picasso:picasso:2.71828'       //Pic Reshape
     implementation 'de.hdodenhof:circleimageview:3.1.0'         //circular image
 

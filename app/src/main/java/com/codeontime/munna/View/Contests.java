@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.codeontime.munna.LoginCheck;
+import com.codeontime.munna.ContestAdd;
 import com.codeontime.munna.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,8 +24,11 @@ public class Contests extends AppCompatActivity {
         mContestAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginCheck.class);
+                Intent intent = new Intent(getApplicationContext(), ContestAdd.class);
                 intent.setFlags( intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.putExtra("dsBookUID", dsBookUID);
+                intent.putExtra("dsBookName", dsBookName);
+                startActivity(intent);
                 startActivity(intent);
             }
         });
