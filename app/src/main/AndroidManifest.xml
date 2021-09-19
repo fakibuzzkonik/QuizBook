@@ -13,9 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBook">
-        <activity android:name=".LoginRegistration"></activity>
+        <activity android:name=".View.ContestAdd"></activity>
+        <activity android:name=".View.Contests" />
+        <activity android:name=".BookAdd" />
+        <activity android:name=".LoginRegistration" />
         <activity android:name=".LoginProfile" />
-        <activity android:name=".LoginCheck" android:noHistory="true"/>
+        <activity
+            android:name=".LoginCheck"
+            android:noHistory="true" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
