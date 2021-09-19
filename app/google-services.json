@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "671102594403",
+    "project_id": "quiz-book-fcb6e",
+    "storage_bucket": "quiz-book-fcb6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671102594403:android:d6f30ef44f4dc14707f756",
+        "android_client_info": {
+          "package_name": "com.codeontime.munna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671102594403-lpk3upksk79b0auvma0huo4u5b6hb61j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-JUkEaDYjv-vw2E86PzEfxEw35jIRvL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671102594403-lpk3upksk79b0auvma0huo4u5b6hb61j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
