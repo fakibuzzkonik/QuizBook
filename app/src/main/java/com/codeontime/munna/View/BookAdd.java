@@ -122,6 +122,7 @@ public class BookAdd extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mBookPasswordEdit.setVisibility(View.GONE);
+                dsBookPassword = mBookPasswordEdit.getText().toString();
             }
         });
 
@@ -132,10 +133,12 @@ public class BookAdd extends AppCompatActivity {
     private void CheckData() {
         dsBookName = mBookNameEdit.getText().toString();
         dsBookBio = mBookBioEdit.getText().toString();
-        dsBookPassword = mBookPasswordEdit.getText().toString();
         dsBookPriority = mBookPriority.getText().toString();
         dsBookViewCount = mBookViewCount.getText().toString();
         dsBookTotalLeve = mBookTotalLevelEdit.getText().toString();
+        if(mBookPrivateRadioBtn.isChecked())
+            dsBookPassword = mBookPasswordEdit.getText().toString();
+
         if(imageUriResultCrop == null){
             Toast.makeText(getApplicationContext(),"Click on Image to Add", Toast.LENGTH_SHORT).show();;
         }else if(dsBookName.equals("NO") || dsBookBio.equals("NO") || dsBookPriority.equals("NO") || dsBookViewCount.equals("NO") || dsBookTotalLeve.equals("NO")  ){
@@ -143,6 +146,8 @@ public class BookAdd extends AppCompatActivity {
         }else if(dsBookName.equals("") || dsBookBio.equals("") || dsBookPriority.equals("") || dsBookViewCount.equals("") || dsBookTotalLeve.equals("")  ){
             Toast.makeText(getApplicationContext(),"Please fillup all ", Toast.LENGTH_SHORT).show();;
         }else if(mBookPrivateRadioBtn.isChecked() && dsBookPassword.equals("NO")){
+            Toast.makeText(getApplicationContext(),"Please Type Password", Toast.LENGTH_SHORT).show();;
+        }else if(mBookPrivateRadioBtn.isChecked() && dsBookPassword.equals("")){
             Toast.makeText(getApplicationContext(),"Please Type Password", Toast.LENGTH_SHORT).show();;
         }else{
 

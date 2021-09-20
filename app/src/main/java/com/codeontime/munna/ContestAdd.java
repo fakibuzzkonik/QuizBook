@@ -3,7 +3,9 @@ package com.codeontime.munna;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,10 +39,12 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContestAdd extends AppCompatActivity {
+public class ContestAdd extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private ImageView mContestImage;
     private EditText mContestName, mContestSyllabus, mContestPriorityNo, mContestViewCount;
     private EditText mContestTotalQuestion, mContestCoins, mTotalParticipent, mContestPassword;
@@ -101,7 +106,7 @@ public class ContestAdd extends AppCompatActivity {
         };*/
         mContestImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 startActivityForResult(new Intent() //Image Selecting
                         .setAction(Intent.ACTION_GET_CONTENT)
                         .setType("image/*"), CODE_IMG_GALLERY);
@@ -127,6 +132,13 @@ public class ContestAdd extends AppCompatActivity {
                 mContestPassword.setVisibility(View.GONE);
             }
         });
+        mContestDateSetText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
     }
     private String dsContestName = "NO", dsContestSyllabus = "NO", dsContestPriority = "NO";
     private String dsContestViewCount = "NO", dsContestTotalQuestion = "NO", dsContestCoins = "NO", dsContestTotalParticipent = "NO";
@@ -141,9 +153,11 @@ public class ContestAdd extends AppCompatActivity {
         dsContestTotalQuestion = mContestTotalQuestion.getText().toString();
         dsContestCoins = mContestCoins.getText().toString();
         dsContestTotalParticipent = mTotalParticipent.getText().toString();
-        dsContestPassword = mContestPassword.getText().toString();
+
         dsContestDuration = mContestDuration.getText().toString();
         //long contest date remain
+        if(mContestPrivateRadioBtn.isChecked())
+            dsContestPassword = mContestPassword.getText().toString();
 
         if(imageUriResultCrop == null){
             Toast.makeText(getApplicationContext(),"Click Image to add", Toast.LENGTH_SHORT).show();;
@@ -155,6 +169,10 @@ public class ContestAdd extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please fillup all ", Toast.LENGTH_SHORT).show();;
         }else if(mContestPrivateRadioBtn.isChecked() && dsContestPassword.equals("NO")){
             Toast.makeText(getApplicationContext(),"Please Type Password", Toast.LENGTH_SHORT).show();;
+        }else if(mContestPrivateRadioBtn.isChecked() && dsContestPassword.equals("")){
+            Toast.makeText(getApplicationContext(),"Please Type Password", Toast.LENGTH_SHORT).show();;
+        }else if(dlContestDate == 0){
+            Toast.makeText(getApplicationContext(),"Select a date", Toast.LENGTH_SHORT).show();;
         }else if(intentFoundError){
             Toast.makeText(getApplicationContext(),"Intent error", Toast.LENGTH_SHORT).show();;
         }else{
@@ -195,19 +213,20 @@ public class ContestAdd extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Photo Uploaded", Toast.LENGTH_SHORT).show();
 
                                     Map<String, Object> note = new HashMap<>();
-                                    note.put("CoName", dsBookName);
+                                    note.put("CoName", dsContestName);
                                     note.put("CoPhotoUrl", dPhotoURL);
+                                    note.put("CoSyllabus", dsContestSyllabus);
                                     note.put("CoPassword", dsContestPassword);
                                     note.put("CoExtra", "0");
                                     note.put("CoCreator", dUserUID);
-                                    note.put("CoViewCount", diContestViews);
-                                    note.put("CoTotalQues", diContestTotalQuestion);
-                                    note.put("CoPriority", diPriority);
-                                    note.put("CoCoins", diContestCoins);
-                                    note.put("CoTotalParticipant", diContestTotalParticipent);
-                                    note.put("CoDuration", diContestDuration);
+                                    note.put("CoiViewCount", diContestViews);
+                                    note.put("CoiTotalQues", diContestTotalQuestion);
+                                    note.put("CoiPriority", diPriority);
+                                    note.put("CoiCoins", diContestCoins);
+                                    note.put("CoiTotalParticipant", diContestTotalParticipent);
+                                    note.put("CoiDuration", diContestDuration);
 
-                                    //note.put("CoDate", "0");  Date of Contest
+                                    note.put("CoiDate", dlContestDate); // Date of Contest
 
 
 
@@ -306,10 +325,11 @@ public class ContestAdd extends AppCompatActivity {
 
 
     @Override   //Selecting Image
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CODE_IMG_GALLERY && resultCode == RESULT_OK &&  data.getData() != null && data != null){
             //Photo Successfully Selected
+
             imageUri_storage = data.getData();
             String dFileSize = getSize(imageUri_storage);       //GETTING IMAGE FILE SIZE
             double  dFileSizeDouble = Double.parseDouble(dFileSize);
@@ -318,14 +338,15 @@ public class ContestAdd extends AppCompatActivity {
             //dFileSizeDouble =  dFileSizeDouble/dMB;
 
             if(dFileSizeDouble <= 5000){
-                //Picasso.get().load(imageUri_storage).into(mBookImage);
+                Picasso.get().load(imageUri_storage).resize(200, 200).centerCrop().into(mContestImage);
                 Toast.makeText(getApplicationContext(),"Selected",Toast.LENGTH_SHORT).show();
-                //startCrop(imageUri_storage);
                 imageUriResultCrop = imageUri_storage;
             }else{
                 Toast.makeText(this, "Failed! (File is Larger Than 5MB)",Toast.LENGTH_SHORT).show();
             }
-        }else{
+
+
+        }else {
             Toast.makeText(this, "Canceled",Toast.LENGTH_SHORT).show();
         }
     }
@@ -351,6 +372,17 @@ public class ContestAdd extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         //Not worked in Croped File so i constant it
         return "JPEG";
+    }
+    private long dlContestDate = 0;
+    @Override   //Date Picker, add implements also
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        dlContestDate  = c.getTimeInMillis();
+        mContestDateSetText.setText(currentDateString);
     }
     @Override
     public void onStart() {
