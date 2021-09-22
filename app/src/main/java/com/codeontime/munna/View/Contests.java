@@ -16,14 +16,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codeontime.munna.Adapter.ContestAdapter;
-import com.codeontime.munna.Adapter.ContestAdapter;
-import com.codeontime.munna.ContestAdd;
-import com.codeontime.munna.MainActivity;
 import com.codeontime.munna.Model.ContestsModel;
 import com.codeontime.munna.R;
 import com.codeontime.munna.RecylerviewClickInterface;
 import com.codeontime.munna.ViewModel.ContestsVM;
-import com.codeontime.munna.ViewModel.MainActivityVM;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -34,7 +30,7 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
     private FloatingActionButton mContestAddBtn;
 
     //RecyclerView
-    private RecyclerView mBook_RecyclerView;
+    private RecyclerView mContest_RecylcerView;
     List<ContestsModel> listContestItem = new ArrayList<>();;
     ContestAdapter mContest_adapter;
 
@@ -43,7 +39,7 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contests);
         mContestAddBtn = (FloatingActionButton)findViewById(R.id.contest_add_btn);
-        mBook_RecyclerView = (RecyclerView)findViewById(R.id.contests_recylerview);
+        mContest_RecylcerView = (RecyclerView)findViewById(R.id.contests_recylerview);
 
         getIntentMethod();
 
@@ -85,11 +81,11 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
                     listContestItem = contest_model_list;
                     int orientation = getResources().getConfiguration().orientation;
                     if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        mBook_RecyclerView.setLayoutManager(new GridLayoutManager(Contests.this,2));
-                        mBook_RecyclerView.setAdapter(mContest_adapter);
+                        mContest_RecylcerView.setLayoutManager(new GridLayoutManager(Contests.this,2));
+                        mContest_RecylcerView.setAdapter(mContest_adapter);
                     } else {
-                        mBook_RecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false));
-                        mBook_RecyclerView.setAdapter(mContest_adapter);
+                        mContest_RecylcerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false));
+                        mContest_RecylcerView.setAdapter(mContest_adapter);
                     }
                 }
             }
@@ -110,10 +106,13 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
 
             if(!intentFoundError){
                 callViewModel();
+            }else{
+                Toast.makeText(getApplicationContext(),"Intent error", Toast.LENGTH_SHORT).show();;
             }
         }else{
             dsBookUID = "NO";
             dsBookName = "NO";
+            Toast.makeText(getApplicationContext(),"Intent error", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -132,6 +131,14 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
 
     @Override
     public void onItemClick(int position) {
-        
+        String dsContestUID = listContestItem.get(position).getCoUID();
+        String dsContestName = listContestItem.get(position).getCoName();
+
+        Intent intent = new Intent(getApplicationContext(), ContestDetails.class);
+        intent.putExtra("dsBookUID", dsBookUID);
+        intent.putExtra("dsBookName", dsBookName);
+        intent.putExtra("dsContestUID", dsContestUID);
+        intent.putExtra("dsContestName", dsContestName);
+        startActivity(intent);
     }
 }

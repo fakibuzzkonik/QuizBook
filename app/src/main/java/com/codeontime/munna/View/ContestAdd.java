@@ -1,4 +1,4 @@
-package com.codeontime.munna;
+package com.codeontime.munna.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +25,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codeontime.munna.View.Contests;
+import com.codeontime.munna.DatePickerFragment;
+import com.codeontime.munna.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -247,6 +248,8 @@ public class ContestAdd extends AppCompatActivity implements DatePickerDialog.On
                                                     finish();
                                                     Intent intent = new Intent(ContestAdd.this, Contests.class);    //Error Intent not sent
                                                     intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                    intent.putExtra("dsBookUID", dsBookUID);
+                                                    intent.putExtra("dsBookName", dsBookName);
                                                     startActivity(intent);
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
