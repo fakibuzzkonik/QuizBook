@@ -13,18 +13,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codeontime.munna.Model.ContestsModel;
 import com.codeontime.munna.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class ContestDetails extends AppCompatActivity {
     private ImageView mDetailsImage;
-    private TextView mDetailsName, mDetailsSyllabus, mDetailsTotalParticipant, mDetailsDuration;
+    private TextView mDetailsName, mDetailsSyllabus, mDetailsTotalParticipant,mDetailsTotalQUestion, mDetailsDuration;
     private LinearLayout mRankLinear, mResultLinear, mSolutionLinear;
     private Button mAddQuestionBtn, mStartBtn;
 
@@ -39,7 +42,17 @@ public class ContestDetails extends AppCompatActivity {
         setContentView(R.layout.activity_contest_details);
         mStartBtn = (Button)findViewById(R.id.contest_details_btn_start) ;
         mAddQuestionBtn = (Button)findViewById(R.id.contest_details_btn_add_ques);
+        mRankLinear = (LinearLayout)findViewById(R.id.contest_details_linear_ranklist);
         mSolutionLinear = (LinearLayout)findViewById(R.id.contest_details_linear_solution);
+
+        mDetailsImage = (ImageView)findViewById(R.id.contest_details_imageview);
+        mDetailsName = (TextView) findViewById(R.id.contest_details_edit_name);
+        mDetailsSyllabus = (TextView)findViewById(R.id.contest_details_edit_syllabus);
+        mDetailsTotalParticipant = (TextView)findViewById(R.id.contest_details_text_participant);
+        mDetailsTotalQUestion = (TextView)findViewById(R.id.contest_details_text_question);
+        mDetailsDuration = (TextView)findViewById(R.id.contest_details_text_duration);
+
+
         getIntentMethod();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() { ///for going to Account Activity Page
@@ -48,6 +61,7 @@ public class ContestDetails extends AppCompatActivity {
                 user = firebaseAuth.getCurrentUser();
                 if(user != null){
                     dUserUID = user.getUid();
+                    checkUserType();
                     Toast.makeText(getApplicationContext(),"Contest Add Activity", Toast.LENGTH_SHORT).show();;
 
                 }else{
@@ -89,7 +103,50 @@ public class ContestDetails extends AppCompatActivity {
                 startActivity(intent);*/
             }
         });
+        mRankLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Rank.class);
+                intent.putExtra("dsBookUID", dsBookUID);
+                intent.putExtra("dsBookName", dsBookName);
+                intent.putExtra("dsContestUID", dsContestUID);
+                intent.putExtra("dsContestName", dsContestName);
+                startActivity(intent);
+            }
+        });
     }
+    long diContestDuration = 0;
+    private void getContestData() {
+        CollectionReference contest_data_ref = db.collection("Quiz").document("Data")
+                .collection("AllBooks").document(dsBookUID).collection("AllContest");
+
+        contest_data_ref.document(dsContestUID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    ContestsModel contestsModel = documentSnapshot.toObject(ContestsModel.class);
+                    String dsContestName = contestsModel.getCoName();
+                    String dsContestSyllabus = contestsModel.getCoSyllabus();
+                    String dsContestPhotoURL = contestsModel.getCoPhotoUrl();
+                    long diTotalParticipant = contestsModel.getCoiTotalParticipant();
+                    long diTotalQuestion = contestsModel.getCoiTotalQues();
+                    diContestDuration = contestsModel.getCoiDuration();
+
+                    Picasso.get().load(dsContestPhotoURL).fit().centerCrop().into(mDetailsImage);
+                    mDetailsName.setText(dsContestName);
+                    mDetailsSyllabus.setText(dsContestSyllabus);
+                    mDetailsTotalParticipant.setText(String.valueOf(diTotalParticipant));
+                    mDetailsTotalQUestion.setText(String.valueOf(diTotalQuestion));
+                    mDetailsDuration.setText(String.valueOf(diContestDuration));
+                    Toast.makeText(getApplicationContext(), "diContestDuration"+diContestDuration , Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "No Data Found" , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private void CheckPartipant(String dsBtnMode) {
         DocumentReference quesRef = db.collection("Quiz").document("Data")
@@ -105,6 +162,7 @@ public class ContestDetails extends AppCompatActivity {
                         intent.putExtra("dsContestUID", dsContestUID);
                         intent.putExtra("dsContestName", dsContestName);
                         intent.putExtra("dsBtnMode", "ShowResult");
+                        intent.putExtra("diContestDuration", 0);
                         startActivity(intent);
                     }else{
                         Toast.makeText(getApplicationContext(),"You have all ready Participated!", Toast.LENGTH_SHORT).show();; //ERROR
@@ -117,6 +175,7 @@ public class ContestDetails extends AppCompatActivity {
                         intent.putExtra("dsContestUID", dsContestUID);
                         intent.putExtra("dsContestName", dsContestName);
                         intent.putExtra("dsBtnMode", "StartExam");
+                        intent.putExtra("diContestDuration", diContestDuration);
                         startActivity(intent);
                     }else{
                         Toast.makeText(getApplicationContext(),"You have not Participated!", Toast.LENGTH_SHORT).show();; //ERROR
@@ -127,6 +186,24 @@ public class ContestDetails extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
 
+            }
+        });
+    }
+
+    public void checkUserType(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user_data_ref = db.collection("Quiz").document("REGISTER");
+        user_data_ref.collection("NORMAL_USER").document(dUserUID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    String dUserType = documentSnapshot.getString("userType");
+                    if(dUserType.equals("Teacher")){
+                        mAddQuestionBtn.setVisibility(View.VISIBLE);
+                    }else{
+                        mAddQuestionBtn.setVisibility(View.GONE);
+                    }
+                }
             }
         });
     }
@@ -150,7 +227,8 @@ public class ContestDetails extends AppCompatActivity {
 
 
             if(!intentFoundError){
-                //callViewModel();
+                getContestData();
+
             }else{
                 Toast.makeText(getApplicationContext(),"Intent error", Toast.LENGTH_SHORT).show();;
             }

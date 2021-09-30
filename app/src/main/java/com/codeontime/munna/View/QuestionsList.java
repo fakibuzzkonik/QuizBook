@@ -12,22 +12,21 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.codeontime.munna.Adapter.QuestionsListAdapter;
-import com.codeontime.munna.MainActivity;
 import com.codeontime.munna.Model.QuestionModel;
 import com.codeontime.munna.R;
 import com.codeontime.munna.RecylerviewQuestionClickInterface;
 import com.codeontime.munna.ViewModel.QuestionsListVM;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -275,6 +274,7 @@ public class QuestionsList extends AppCompatActivity implements RecylerviewQuest
     String dsBookUID = "NO", dsBookName = "NO";
     String dsContestUID = "NO", dsContestName = "NO";
     String dsBtnMode = "NO";
+    long diContestDuration = 0;
     private boolean intentFoundError = true;
     private void getIntentMethod() {
         //////////////GET INTENT DATA
@@ -286,6 +286,7 @@ public class QuestionsList extends AppCompatActivity implements RecylerviewQuest
             dsContestUID = intent.getExtras().getString("dsContestUID");    //Sylhet
             dsContestName = intent.getExtras().getString("dsContestName");    //Grocery or Food or Home Services
             dsBtnMode = intent.getExtras().getString("dsBtnMode","NO");    //Grocery or Food or Home Services
+            diContestDuration = intent.getExtras().getLong("diContestDuration",0);    //Grocery or Food or Home Services
             intentFoundError = CheckIntentMethod(dsBookUID);
             intentFoundError = CheckIntentMethod(dsBookName);
             intentFoundError = CheckIntentMethod(dsContestUID);
@@ -300,6 +301,7 @@ public class QuestionsList extends AppCompatActivity implements RecylerviewQuest
                     getUserResult();
                 }else if(dsBtnMode.equals("StartExam")){
                     callViewModel();
+                    CountDownStart(diContestDuration);
                 }else {
                     Toast.makeText(getApplicationContext(),"Error", Toast.LENGTH_SHORT).show();;
                 }
@@ -318,7 +320,46 @@ public class QuestionsList extends AppCompatActivity implements RecylerviewQuest
         }
 
     }
+    private android.os.Handler mHandler = new Handler();
+    private Runnable mRunnable;
+    private static final int LOCATION_UPDATE_INTERVAL = 1000;
+    private void CountDownStart(long duration) {
+        Toast.makeText(getApplicationContext(), "duration"+duration , Toast.LENGTH_SHORT).show();
+        diContestDuration = duration*1000;
+        diContestDuration = diContestDuration*60;
+            /*mHandler.postDelayed(mRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    SubmitAnswerMethod();
+                    //mHandler.postDelayed(mRunnable, LOCATION_UPDATE_INTERVAL);
+                }
+            }, diContestDuration);*/
+        new CountDownTimer(diContestDuration , 1000 ) {
 
+            public void onTick(long millisUntilFinished) {
+                long diff = millisUntilFinished;
+                long sec = 0;
+                long minute = 0;
+                diff = diff/1000;
+                String dsTitle = "Remain ";
+                if(diff/60 > 0){
+                    minute = diff/60;
+                    dsTitle += minute + "min ";
+                }
+                if(diff%60 != 0){
+                    sec = diff%60;
+                    dsTitle += sec +"sec";
+                }
+                setTitle(dsTitle);
+                //here you can have your logic to set text to edittext
+            }
+            public void onFinish() {
+                setTitle("Finished");
+                SubmitAnswerMethod();
+            }
+
+        }.start();
+    }
 
 
     private boolean CheckIntentMethod(String dsTestIntent){

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_7"
     tools:context=".LoginRegistration">
     <ScrollView
         android:layout_width="match_parent"
@@ -101,7 +102,7 @@
                         <RadioButton android:id="@+id/radio_user"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="User"
+                            android:text="Student"
                             android:layout_marginLeft="10dp"/>
 
                         <RadioButton
@@ -110,6 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:text="Admin"
+                            android:visibility="gone"
                             tools:visibility="gone" />
 
                     </RadioGroup>

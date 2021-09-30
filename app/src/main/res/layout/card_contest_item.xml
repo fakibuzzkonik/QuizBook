@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@drawable/style_ripple_text_paid_round"
 
         android:orientation="horizontal">
 
@@ -27,45 +26,47 @@
             android:id="@+id/level_e_imagecard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginEnd="10dp"
             android:elevation="10dp"
             cardview:cardCornerRadius="20dp"
             cardview:layout_constraintBottom_toBottomOf="parent"
-            cardview:layout_constraintStart_toStartOf="parent"
+            cardview:layout_constraintEnd_toEndOf="parent"
             cardview:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/level_d_item_img"
-                android:layout_width="130dp"
-                android:layout_height="170dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="#222d"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/level_d_title_id"
-            android:layout_width="wrap_content"
+            android:layout_width="282dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="24dp"
-            android:text="Sub Category Name"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Contest Name"
             android:textColor="#2d2d2d"
             android:textSize="16sp"
             android:textStyle="bold"
-            cardview:layout_constraintStart_toEndOf="@+id/level_e_imagecard"
-            cardview:layout_constraintTop_toTopOf="@+id/level_e_imagecard" />
+            cardview:layout_constraintBottom_toTopOf="@+id/level_d_view_image"
+            cardview:layout_constraintStart_toStartOf="parent"
+            cardview:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/level_d_view_image"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_baseline_remove_red_eye_24"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_baseline_people_alt_24"
             cardview:layout_constraintBottom_toTopOf="@+id/level_d_bio_text"
-            cardview:layout_constraintStart_toStartOf="@+id/level_d_title_id"
+            cardview:layout_constraintStart_toStartOf="parent"
             cardview:layout_constraintTop_toBottomOf="@+id/level_d_title_id"
-            cardview:tint="@color/colorPrimary"
-            />
+            cardview:tint="@color/purple_700" />
         <!---->
         <TextView
             android:id="@+id/level_d_views"
@@ -85,15 +86,15 @@
             android:id="@+id/level_d_bio_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="sans-serif-medium"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif"
             android:maxLines="3"
             android:text="long text"
-            cardview:layout_constraintBottom_toBottomOf="@+id/level_e_imagecard"
-            cardview:layout_constraintEnd_toEndOf="parent"
-            cardview:layout_constraintStart_toStartOf="@+id/level_d_view_image"
+            cardview:layout_constraintBottom_toBottomOf="parent"
+            cardview:layout_constraintStart_toStartOf="parent"
             cardview:layout_constraintTop_toBottomOf="@+id/level_d_view_image" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

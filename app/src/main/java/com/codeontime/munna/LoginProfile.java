@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.autofill.TextValueSanitizer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codeontime.munna.View.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,8 +19,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
-
-import static android.view.View.GONE;
 
 public class LoginProfile extends AppCompatActivity {
     private ImageView mUserProfileImage;
@@ -59,6 +57,7 @@ public class LoginProfile extends AppCompatActivity {
                     String dsUserName = user.getDisplayName();
                     mUserNameText.setText(dsUserName);
                     Toast.makeText(getApplicationContext(),"Welcome "+dsUserName, Toast.LENGTH_SHORT).show();;
+                    getUserData();
                     ///getUserData();
                 }else{
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -67,7 +66,7 @@ public class LoginProfile extends AppCompatActivity {
                 }
             }
         };
-        getUserData();
+
     }
     private String dUserUID = "NO";
     private void getUserData() {

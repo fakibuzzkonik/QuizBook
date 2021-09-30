@@ -1,5 +1,6 @@
 package com.codeontime.munna.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,8 +21,14 @@ import com.codeontime.munna.Model.ContestsModel;
 import com.codeontime.munna.R;
 import com.codeontime.munna.RecylerviewClickInterface;
 import com.codeontime.munna.ViewModel.ContestsVM;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +40,11 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
     private RecyclerView mContest_RecylcerView;
     List<ContestsModel> listContestItem = new ArrayList<>();;
     ContestAdapter mContest_adapter;
+    //Firebase Auth
+    private String dUserUID = "NO";
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener; //For going to Account Activity Page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +54,23 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
         mContest_RecylcerView = (RecyclerView)findViewById(R.id.contests_recylerview);
 
         getIntentMethod();
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() { ///for going to Account Activity Page
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    dUserUID = user.getUid();
+                    checkUserType();
+                }else{
+                    mContestAddBtn.setVisibility(View.GONE);
+                    /*Toast.makeText(getApplicationContext(),"Please Login", Toast.LENGTH_SHORT).show();;
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);*/
+                }
+            }
+        };
 
         mContestAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +79,27 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
                 intent.putExtra("dsBookUID", dsBookUID);
                 intent.putExtra("dsBookName", dsBookName);
                 startActivity(intent);
+            }
+        });
+
+    }
+
+
+
+    public void checkUserType(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user_data_ref = db.collection("Quiz").document("REGISTER");
+        user_data_ref.collection("NORMAL_USER").document(dUserUID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    String dUserType = documentSnapshot.getString("userType");
+                    if(dUserType.equals("Teacher")){
+                        mContestAddBtn.setVisibility(View.VISIBLE);
+                    }else{
+                        mContestAddBtn.setVisibility(View.GONE);
+                    }
+                }
             }
         });
     }
@@ -140,5 +190,19 @@ public class Contests extends AppCompatActivity  implements RecylerviewClickInte
         intent.putExtra("dsContestUID", dsContestUID);
         intent.putExtra("dsContestName", dsContestName);
         startActivity(intent);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

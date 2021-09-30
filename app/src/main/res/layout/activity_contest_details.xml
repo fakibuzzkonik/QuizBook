@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_7"
     tools:context=".View.ContestDetails">
 
 
@@ -143,6 +144,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
+                    android:background="@drawable/style_ripple_text_paid_round"
+                    android:padding="5dp"
+                    android:layout_marginRight="5dp"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="20dp"
@@ -163,6 +167,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
+                    android:layout_marginRight="5dp"
+                    android:visibility="gone"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="20dp"
@@ -182,6 +188,9 @@
                     android:id="@+id/contest_details_linear_solution"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/style_ripple_text_paid_round"
+                    android:layout_marginLeft="5dp"
+                    android:padding="5dp"
                     android:paddingHorizontal="5dp"
                     android:orientation="horizontal">
                     <ImageView
@@ -208,6 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:paddingHorizontal="50dp"
                     android:text="Add Question" />
                 

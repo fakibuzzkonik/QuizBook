@@ -39,7 +39,7 @@ public class BookAdapter  extends RecyclerView.Adapter<BookAdapter.BookAdapter_H
     @Override
     public void onBindViewHolder(@NonNull BookAdapter_Holder holder, int position) {
         String dPhotoURL = mData.get(position).getBookPhotoUrl();
-        Picasso.get().load(dPhotoURL).into(holder.mL4ItemImageView);
+        Picasso.get().load(dPhotoURL).fit().centerCrop().into(holder.mL4ItemImageView);
         String dsTitle = mData.get(position).getBookName();
         int diViews = mData.get(position).getBookiViewCount();
         String dsBio = mData.get(position).getBookBio();

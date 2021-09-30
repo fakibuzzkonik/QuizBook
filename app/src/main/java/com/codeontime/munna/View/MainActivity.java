@@ -1,5 +1,6 @@
-package com.codeontime.munna;
+package com.codeontime.munna.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,18 +14,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.codeontime.munna.Adapter.BookAdapter;
+import com.codeontime.munna.LoginCheck;
 import com.codeontime.munna.Model.BookModel;
-import com.codeontime.munna.View.BookAdd;
-import com.codeontime.munna.View.Contests;
+import com.codeontime.munna.R;
+import com.codeontime.munna.RecylerviewClickInterface;
 import com.codeontime.munna.ViewModel.MainActivityVM;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RecylerviewClickInterface  {
+public class MainActivity extends AppCompatActivity implements RecylerviewClickInterface {
     private Button mLoginBtn;
     private Button mAddBook;
 
@@ -32,6 +41,12 @@ public class MainActivity extends AppCompatActivity implements RecylerviewClickI
     private RecyclerView mBook_RecyclerView;
     List<BookModel> listBookItem;
     BookAdapter mbook_adapter;
+
+    //Firebase Auth
+    private String dUserUID = "NO";
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener; //For going to Account Activity Page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +56,24 @@ public class MainActivity extends AppCompatActivity implements RecylerviewClickI
         mLoginBtn = (Button)findViewById(R.id.main_login_btn);
         mBook_RecyclerView = (RecyclerView)findViewById(R.id.main_book_recylerview);
         listBookItem = new ArrayList<>();
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() { ///for going to Account Activity Page
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    dUserUID = user.getUid();
+                    mLoginBtn.setText("My Profile");
+                    checkUserType();
+                }else{
+                    /*Toast.makeText(getApplicationContext(),"Please Login", Toast.LENGTH_SHORT).show();;
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);*/
+                }
+            }
+        };
 
         mAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +92,23 @@ public class MainActivity extends AppCompatActivity implements RecylerviewClickI
         });
 
         callViewModel();
+    }
+    public void checkUserType(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference user_data_ref = db.collection("Quiz").document("REGISTER");
+        user_data_ref.collection("NORMAL_USER").document(dUserUID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    String dUserType = documentSnapshot.getString("userType");
+                    if(dUserType.equals("Teacher")){
+                        mAddBook.setVisibility(View.VISIBLE);
+                    }else{
+                        mAddBook.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
     //View Model
     private MainActivityVM mainActivityVM;
@@ -109,5 +159,18 @@ public class MainActivity extends AppCompatActivity implements RecylerviewClickI
             intent.putExtra("dsBookName", dsBookName);
             startActivity(intent);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

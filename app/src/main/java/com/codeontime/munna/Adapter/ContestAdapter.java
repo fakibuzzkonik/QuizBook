@@ -11,11 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codeontime.munna.Model.ContestsModel;
+import com.codeontime.munna.Model.QuestionModel;
 import com.codeontime.munna.R;
 import com.codeontime.munna.RecylerviewClickInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Random;
 
 public class ContestAdapter   extends RecyclerView.Adapter<ContestAdapter.ContestAdapter_Holder> {
     private Context mContext;
@@ -32,17 +34,18 @@ public class ContestAdapter   extends RecyclerView.Adapter<ContestAdapter.Contes
     public ContestAdapter.ContestAdapter_Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_book_item,parent,false); //connecting to cardview
+        view = mInflater.inflate(R.layout.card_contest_item,parent,false); //connecting to cardview
         return new ContestAdapter.ContestAdapter_Holder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContestAdapter.ContestAdapter_Holder holder, int position) {
         String dPhotoURL = mData.get(position).getCoPhotoUrl();
-        Picasso.get().load(dPhotoURL).into(holder.mItemImageView);
+        Picasso.get().load(dPhotoURL).fit().centerCrop().into(holder.mItemImageView);
         String dsTitle = mData.get(position).getCoName();
         long diViews = mData.get(position).getCoiViewCount();
         String Syllabus = mData.get(position).getCoSyllabus();
+
         holder.mItemTittleText.setText(dsTitle);
         holder.mItemBioText.setText(Syllabus);
         holder.mItemViewText.setText(String.valueOf(diViews));
@@ -74,18 +77,6 @@ public class ContestAdapter   extends RecyclerView.Adapter<ContestAdapter.Contes
                     recylerviewClickInterface .onItemClick(getAdapterPosition());
                 }
             });
-            /*mCategoryBtn = (Button) itemView.findViewById(R.id.card_category_btn);
-
-            mCategoryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int postion = getAdapterPosition();
-                    if (postion != RecyclerView.NO_POSITION && listener1 != null) {
-                        listener1.onItemClick(getSnapshots().getSnapshot(postion), postion);
-
-                    }
-                }
-            });*/
         }
     }
 
