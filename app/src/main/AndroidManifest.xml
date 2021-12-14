@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.codeontime.munna">
+    package="com.codeontime.konik">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,21 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizBook">
-        <activity android:name=".View.Rank"></activity>
+        <activity android:name="com.codeontime.konik.View.Rank"></activity>
         <activity
-            android:name=".View.QuestionsList"
+            android:name="com.codeontime.konik.View.QuestionsList"
             android:noHistory="true" />
-        <activity android:name=".View.QuestionAdd" />
-        <activity android:name=".View.ContestDetails" />
-        <activity android:name=".View.ContestAdd" />
-        <activity android:name=".View.Contests" />
-        <activity android:name=".View.BookAdd" />
-        <activity android:name=".LoginRegistration" />
-        <activity android:name=".LoginProfile" />
+        <activity android:name="com.codeontime.konik.View.QuestionAdd" />
+        <activity android:name="com.codeontime.konik.View.ContestDetails" />
+        <activity android:name="com.codeontime.konik.View.ContestAdd" />
+        <activity android:name="com.codeontime.konik.View.Contests" />
+        <activity android:name="com.codeontime.konik.View.BookAdd" />
+        <activity android:name="com.codeontime.konik.LoginRegistration" />
+        <activity android:name="com.codeontime.konik.LoginProfile" />
         <activity
-            android:name=".LoginCheck"
-            android:noHistory="true" />
-        <activity android:name=".View.MainActivity">
+            android:name="com.codeontime.konik.LoginCheck"
+            android:noHistory="false" />
+        <activity android:name="com.codeontime.konik.View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

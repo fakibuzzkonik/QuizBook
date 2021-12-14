@@ -28,7 +28,7 @@
                     android:layout_width="130dp"
                     android:layout_height="170dp"
                     android:layout_marginTop="40dp"
-                    android:background="#222d"/>
+                    android:background="@color/purple_200"/>
 
                 <EditText
                     android:id="@+id/contest_add_name_edit"
@@ -55,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Priority No"
+                    android:hint="Serial No"
                     android:inputType="number"
                     android:layout_marginTop="15dp"
                     />
@@ -74,20 +74,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Total Question"
+                    android:hint="Total Question (0)"
                     android:inputType="number"
                     android:layout_marginTop="15dp"
                     />
-                <EditText
-                    android:id="@+id/contest_add_coins_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Gift Coins"
-                    android:layout_marginTop="15dp"
-                    android:visibility="visible"
-                    android:inputType="numberDecimal"
-                    />
+
                 <EditText
                     android:id="@+id/contest_add_total_participant_edit"
                     android:layout_width="match_parent"
@@ -98,16 +89,7 @@
                     android:visibility="visible"
                     android:inputType="numberDecimal"
                     />
-                <EditText
-                    android:id="@+id/contest_add_password_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Password"
-                    android:layout_marginTop="15dp"
-                    android:visibility="gone"
-                    android:inputType="numberPassword"
-                    />
+
                 
                 
                 <EditText
@@ -115,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Contest Duration"
+                    android:hint="Contest Duration (Min)"
                     android:layout_marginTop="15dp"
                     android:visibility="visible"
                     android:inputType="numberDecimal"
@@ -132,29 +114,7 @@
                     android:visibility="visible"
                     />
                 
-                <LinearLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
 
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
-
-                    <RadioGroup
-                        android:id="@+id/contest_add_privacy_radio_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <RadioButton android:id="@+id/contest_add_public_radio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Public"
-                            android:layout_marginRight="20dp"/>
-                        <RadioButton android:id="@+id/contest_add_private_radio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Private"
-                            android:layout_marginLeft="20dp"/>
-                    </RadioGroup>
-                </LinearLayout>
 
 
                 <Button
@@ -163,9 +123,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="30dp"
-
+                    android:paddingVertical="25dp"
                     android:paddingHorizontal="50dp"
-                    android:text="UPDATE" />
+                    android:text="Add Contest" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

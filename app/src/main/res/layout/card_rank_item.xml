@@ -78,34 +78,9 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_baseline_offline_coins_bolt_24"
+            android:src="@drawable/ic_baseline_done_all_24"
             cardview:layout_constraintStart_toStartOf="@+id/card_rank_user_name"
             cardview:layout_constraintTop_toBottomOf="@+id/card_rank_user_name"
-            cardview:tint="@color/colorPrimary" />
-
-        <TextView
-            android:id="@+id/card_rank_coins_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:fontFamily="sans-serif-light"
-            android:maxLines="3"
-            android:text="50"
-            android:textColor="#2d2d2d"
-            android:textSize="13sp"
-            cardview:layout_constraintBottom_toBottomOf="@+id/card_rank_correct_img"
-            cardview:layout_constraintStart_toEndOf="@+id/card_rank_correct_img"
-            cardview:layout_constraintTop_toTopOf="@+id/card_rank_correct_img" />
-
-        <ImageView
-            android:id="@+id/card_rank_right_icon_img"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_baseline_check_right_circle_24"
-            cardview:layout_constraintBottom_toBottomOf="@+id/card_rank_correct_img"
-            cardview:layout_constraintStart_toEndOf="@+id/card_rank_coins_text"
-            cardview:layout_constraintTop_toTopOf="@+id/card_rank_correct_img"
             cardview:tint="@color/colorPrimary" />
 
         <TextView
@@ -119,9 +94,9 @@
             android:textColor="#2d2d2d"
             android:textSize="13sp"
             cardview:layout_constraintBottom_toBottomOf="@+id/card_rank_correct_img"
-            cardview:layout_constraintStart_toEndOf="@+id/card_rank_right_icon_img"
-            cardview:layout_constraintTop_toTopOf="@+id/card_rank_correct_img"
-            cardview:layout_constraintVertical_bias="1.0" />
+            cardview:layout_constraintStart_toEndOf="@+id/card_rank_correct_img"
+            cardview:layout_constraintTop_toTopOf="@+id/card_rank_correct_img" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
